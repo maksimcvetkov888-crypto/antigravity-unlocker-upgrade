@@ -67,7 +67,7 @@ pub struct ReleaseInfo {
 impl ReleaseInfo {
     /// Returns true if this release is strictly newer than the currently running binary.
     pub fn is_newer_than_current(&self) -> bool {
-        is_newer_version(&self.tag_name, current_version())
+        false
     }
 
     /// Strips leading 'v' / 'V' and whitespace from tag name for display.
@@ -330,37 +330,8 @@ pub fn check_update_cached(force: bool) -> Result<Option<ReleaseInfo>, String> {
 /// open. Only the first pass may answer from the on-disk cache: after that the
 /// thread has already waited the full interval, so re-reading a cache it wrote
 /// itself would just double the wait.
-pub fn spawn_watch(tx: std::sync::mpsc::Sender<ReleaseInfo>, wake: Box<dyn Fn() + Send>) {
-    std::thread::Builder::new()
-        .name("update-watch".to_string())
-        .spawn(move || {
-            let mut first = true;
-            loop {
-                match check_update_cached(!first) {
-                    Ok(Some(rel)) => {
-                        // A closed receiver means the window is gone; so is the
-                        // reason to keep checking.
-                        if tx.send(rel).is_err() {
-                            return;
-                        }
-                        // egui sleeps until something asks it to repaint, so a
-                        // banner that only lands in a channel stays invisible
-                        // until the user happens to move the mouse.
-                        wake();
-                    }
-                    Ok(None) => {}
-                    Err(_e) => {
-                        // Background check: a failure is not the user's problem,
-                        // and there is no UI surface that could act on it.
-                        #[cfg(debug_assertions)]
-                        eprintln!("update check failed: {}", _e);
-                    }
-                }
-                first = false;
-                std::thread::sleep(CHECK_INTERVAL);
-            }
-        })
-        .ok();
+pub fn spawn_watch(_tx: std::sync::mpsc::Sender<ReleaseInfo>, _wake: Box<dyn Fn() + Send>) {
+    // Background update check disabled
 }
 
 #[cfg(test)]

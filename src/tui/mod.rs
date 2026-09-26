@@ -838,21 +838,10 @@ impl App {
     }
 
     fn title_line(&self) -> Line<'static> {
-        let mut spans = vec![Span::styled(
+        Line::from(vec![Span::styled(
             format!(" Antigravity Unlocker 2 v{} ", update::current_version()),
             Style::new().add_modifier(Modifier::BOLD),
-        )];
-        if let Some(rel) = &self.update {
-            spans.push(Span::styled(
-                format!(
-                    " ⬆ новая версия {}: {} ",
-                    rel.display_version(),
-                    update::RELEASES_LATEST_URL
-                ),
-                Style::new().fg(Color::Black).bg(Color::Yellow),
-            ));
-        }
-        Line::from(spans)
+        )])
     }
 
     fn draw_license(&mut self, f: &mut Frame, area: Rect) {

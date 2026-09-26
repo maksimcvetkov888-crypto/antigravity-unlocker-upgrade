@@ -167,23 +167,7 @@ impl App {
         self.busy.is_some()
     }
 
-    /// The "новая версия" button, drawn on both screens (spec item 10: it must
-    /// not disappear after the key is accepted).
-    fn update_banner(&self, ui: &mut egui::Ui) {
-        let Some(rel) = &self.update else { return };
-        let label = format!("⬆  Доступна новая версия — {}", rel.display_version());
-        let btn = egui::Button::new(egui::RichText::new(label).color(egui::Color32::BLACK))
-            .fill(theme::WARN)
-            .corner_radius(egui::CornerRadius::same(theme::RADIUS_SMALL))
-            .min_size(egui::vec2(ui.available_width(), 32.0));
-        if ui.add(btn).clicked() {
-            // Always /latest, never the tag URL from the API response: the point
-            // is to land the user on whatever is newest when they click, not on
-            // the release this process happened to see hours ago.
-            crate::utils::open_url(update::RELEASES_LATEST_URL);
-        }
-        ui.add_space(10.0);
-    }
+    fn update_banner(&self, _ui: &mut egui::Ui) {}
 
     /// Re-launches this exe elevated and closes the current window.
     ///
