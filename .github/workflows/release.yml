@@ -102,4 +102,6 @@ jobs:
             artifacts/windows/* \
             artifacts/linux/* \
             --title "Antigravity Unlocker $TAG" \
-            --notes "Antigravity Unlocker $TAG: без лицензионного кода, с поддержкой Antigravity VS Code и TUI."
+            --notes "Antigravity Unlocker $TAG: без лицензионного кода, с поддержкой Antigravity VS Code и TUI." \
+            --clobber
+
