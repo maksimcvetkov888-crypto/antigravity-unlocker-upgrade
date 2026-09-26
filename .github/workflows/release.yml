@@ -98,10 +98,10 @@ jobs:
           if [ "$TAG" = "main" ] || [ -z "$TAG" ]; then
             TAG="${{ github.event.inputs.tag || 'v2.15.1.3' }}"
           fi
+          gh release delete "$TAG" -y --cleanup-tag=false 2>/dev/null || true
           gh release create "$TAG" \
             artifacts/windows/* \
             artifacts/linux/* \
             --title "Antigravity Unlocker $TAG" \
-            --notes "Antigravity Unlocker $TAG: без лицензионного кода, с поддержкой Antigravity VS Code и TUI." \
-            --clobber
+            --notes "Antigravity Unlocker $TAG: без лицензионного кода, с поддержкой Antigravity VS Code и TUI."
 
